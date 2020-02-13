@@ -9,7 +9,7 @@ class Game {
         const phraseList = [
             new Phrase("Life is a box of Chocolate"),
             new Phrase("May the force be with you"),
-            new Phrase("You talkihg to me"),
+            new Phrase("You talking to me"),
             new Phrase("You kidding bro"),
             new Phrase("Testing I am ")
         ];
@@ -18,81 +18,97 @@ class Game {
     }
     startGame() {
         document.getElementById("overlay").style.display = "none";
-        //calls getRandomPhrase() to get random text
-        const text = new Phrase(this.getRandomPhrase());
-        //Call add phrase to display from phrase class
+        this.activePhrase = new Phrase(this.getRandomPhrase());
 
-        text.addPhraseToDisplay();
-        //Set activePhrase to the chosen one.
-        this.activePhrase = text;
+        this.activePhrase.addPhraseToDisplay();
     }
 
     getRandomPhrase() {
-        //get a random phrase from phrases and return it
         const r = Math.floor(Math.random() * this.phrases.length);
         const phrase = this.phrases[r].phrase;
         return phrase;
     }
 
     handleInteraction(e) {
-        // disabled selected letter from keyboard
         e.disabled = true;
 
-        /*
-        If the guess is incorrect and not in phrase
-        add wrong css class to button and call removeLife()
-        */
-        const text = this.activePhrase;
-        const charArray = [...text];
         const c = e.target.textContent;
 
-        if (charArray.includes(c)) {
+        if (this.activePhrase.checkLetter(c)) {
             e.target.className = "chosen";
-            const char = document.getElementsByClassName(c)[0];
-            char.className = `show letter ${c}`;
-            console.log(char);
+            this.activePhrase.showMatchedLetter(c);
         } else {
             e.target.className = "wrong";
-            console.log(`Dont' Include ${c}`);
             this.removeLife();
         }
-        console.log(text);
 
-        /*
-        if the guess is correct and is in phrase add chosen css class 
-        calss showMatchedLetter() and calls checkForWin()
-        if player won show gameOver()
-        */
+        this.gameOver(this.checkForWin());
+
+        console.log(this.activePhrase.phrase);
     }
 
     removeLife() {
-        //Remove Life from scoreboard by replacing heart image with loseHeart.png
         const lives = document.getElementsByClassName("tries");
-        console.log(lives);
         const triesLeft = lives.length - this.missed;
         if (triesLeft > 0) {
-            lives[triesLeft - 1].firstElementChild.src = "images/lostHeart.png";
+            lives[this.missed].firstElementChild.src = "images/lostHeart.png";
+            this.missed += 1;
             console.log(this.missed);
         }
-        // Increase missed counter by 1
-        this.missed += 1;
+        // this.missed += 1;
+
         if (this.missed == 5) {
-            this.gameOver("You lose");
+            this.gameOver(true);
         }
-        // If missed 5 times call gameOver()
     }
 
     checkForWin() {
-        // check if all letters are revealed, return true of false
+        const hiddenLetters = document.getElementsByClassName("hide letter");
+        if (hiddenLetters.length > 0) {
+            return false;
+        } else {
+            this.resetGame();
+            return true;
+        }
     }
 
-    gameOver(message) {
-        //display original startscreen overlay
-        document.getElementById("overlay").style.display = "block";
+    gameOver(gameWon) {
+        if (gameWon) {
+            document.getElementById("overlay").style.display = "flex";
+            document.getElementById("game-over-message").textContent =
+                "Great Job!. You Won.";
+            document.getElementById("overlay").className = "win";
+        } else {
+            document.getElementById("game-over-message").textContent =
+                "Sorry, better luck next time!";
+            document.getElementById("overlay").className = "lose";
+        }
+    }
 
-        //update overlay h1 with win or lose message
-        document.getElementById("game-over-message").textContent = message;
-        //replace overlay Start class with in or lose class
-        document.getElementById("overlay").className = "lose";
+    resetGame() {
+        //Keyboard Reset
+        const qwerty = document.getElementById("qwerty");
+        const qwertyButtons = qwerty.querySelectorAll("button");
+        qwertyButtons.forEach(button => {
+            button.className = "key";
+        });
+
+        //Missed Reset
+        this.missed = 0;
+
+        //Hearts Resets
+        const images = document.querySelectorAll("li img");
+        for (const i of images) {
+            i.src = "images/liveHeart.png";
+        }
+
+        //display blocks
+        const ul = document.querySelector("#phrase ul");
+        console.log(ul);
+        while (ul.firstChild) {
+            ul.removeChild(ul.firstChild);
+        }
+        console.log("Calling start game");
+        // this.startGame();
     }
 }

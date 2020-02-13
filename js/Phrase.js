@@ -4,11 +4,10 @@ class Phrase {
     }
 
     addPhraseToDisplay() {
-        console.log("Display Phrase");
+        const ul = document.querySelector("#phrase ul");
         const text = this.phrase;
         const textArray = [...text];
 
-        const ul = document.querySelector("#phrase ul");
         textArray.forEach(text => {
             const li = document.createElement("li");
             if (text == " ") {
@@ -35,5 +34,10 @@ class Phrase {
     }
 
     //Reveals the letter on board if matches
-    showMatchedLetter() {}
+    showMatchedLetter(letter) {
+        const char = document.getElementsByClassName(letter);
+        for (const c of char) {
+            c.className = `show letter ${letter}`;
+        }
+    }
 }
