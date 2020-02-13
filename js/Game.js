@@ -114,7 +114,6 @@ class Game {
 
         //display blocks
         const ul = document.querySelector("#phrase ul");
-        console.log(ul);
         while (ul.firstChild) {
             ul.removeChild(ul.firstChild);
         }
