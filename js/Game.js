@@ -1,11 +1,12 @@
 class Game {
     constructor() {
         this.missed = 0; //failed tries
-        this.phrases = this.createPhrases(); //array of 5 Phrase Objects
-        this.activePhrase = null; //currently active in game
+        this.phrases = this.createPhrases(); //set to a method which is creating list of phrase arrays
+        this.activePhrase = null; //currently active in game and set to null on start
     }
 
     createPhrases() {
+        //Generating list of Phrase Objects and passing phrases in it
         const phraseList = [
             new Phrase("Life is a box of Chocolate"),
             new Phrase("May the force be with you"),
@@ -26,24 +27,60 @@ class Game {
             new Phrase("Sing a song")
         ];
 
-        return phraseList;
+        return phraseList; // Returning full phrase list we can use for game
     }
     startGame() {
-        this.resetGame();
-        document.getElementById("overlay").style.display = "none";
-        this.activePhrase = new Phrase(this.getRandomPhrase());
+        this.resetGame(); //This reset method is called every time on start of the game.
+        document.getElementById("overlay").style.display = "none"; // first overlay is set to none so we can see the buttons and pharse
+        this.activePhrase = new Phrase(this.getRandomPhrase()); //set active phrase to one of the randomly generated pharse
 
-        this.activePhrase.addPhraseToDisplay();
+        this.activePhrase.addPhraseToDisplay(); // Setting the active phrase to display
+
         console.log(this.activePhrase.phrase); // Just so we can see which phrase is displayed
     }
 
+    //Getting random phrase from phrases and returning
     getRandomPhrase() {
-        const r = Math.floor(Math.random() * this.phrases.length);
-        const phrase = this.phrases[r].phrase;
+        const randNum = Math.floor(Math.random() * this.phrases.length);
+        const phrase = this.phrases[randNum].phrase;
         return phrase;
     }
 
+    //This is the main interaction method with all the logic
     handleInteraction(e) {
+        // console.log(e.key.toLowerCase());
+        const char = qwerty.querySelectorAll("button"); //find all the buttons
+        for (let i = 0; i < char.length; i++) {
+            const button = char[i];
+            const buttonText = button.innerText;
+            if (e.key.toLowerCase() == buttonText) {
+                // if the buttons has the text of the key pressed
+
+                button.disabled = true; //disable the button
+
+                if (this.activePhrase.checkLetter(buttonText)) {
+                    //if active phrase has the button text
+                    button.className = "chosen"; //change the class of button to chosen
+                    this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+                } else {
+                    if (button.className != "wrong") {
+                        //if the button class is not already wrong
+                        button.className = "wrong"; //set it to wrong
+                        this.removeLife(); //remove life
+                    }
+                }
+            }
+        }
+        if (this.checkForWin()) {
+            this.gameOver(this.checkForWin()); //check if the user is won. then display gameOver
+        }
+    }
+
+    /* 
+    FOLLOWING CODE IS ONLY TO HANDLE INTERATCTION FROM THE ON SCREEN KEYBOARD
+    //// START OF THE CODE /////
+    handleInteraction(e) {
+
         e.disabled = true;
 
         const c = e.target.textContent;
@@ -59,44 +96,56 @@ class Game {
         this.gameOver(this.checkForWin());
     }
 
+    //// END OF THE CODE ////
+    */
+
+    //This method removes the life if the incorrect guess is made.
     removeLife() {
-        const lives = document.getElementsByClassName("tries");
-        const triesLeft = lives.length - this.missed;
+        const lives = document.getElementsByClassName("tries"); //Total Lives
+        const triesLeft = lives.length - this.missed; //Total tries left: length - missed
+
+        //If we have more than 0 tries then change the pic and add to missed
         if (triesLeft > 0) {
-            lives[this.missed].firstElementChild.src = "images/lostHeart.png";
-            this.missed += 1;
+            lives[this.missed].firstElementChild.src = "images/lostHeart.png"; //change heart image
+            this.missed += 1; // add one to missed
         }
 
+        //If missed count is 5, call gameOver
         if (this.missed == 5) {
             this.gameOver(true);
         }
     }
 
+    //This method will check if the player has revealed all letters
     checkForWin() {
-        const hiddenLetters = document.getElementsByClassName("hide letter");
+        const hiddenLetters = document.getElementsByClassName("hide letter"); //Total hidden litters which are set by Phrase class
         if (hiddenLetters.length > 0) {
+            //if more than zero, not winning yet if 0 return true and player won
             return false;
         } else {
-            this.resetGame();
             return true;
         }
     }
 
+    //Game over method will display overlay and message depending on the outcome
     gameOver(gameWon) {
+        //if the game won has input of true it will display and dset the content to this winning block
         if (gameWon) {
             document.getElementById("overlay").style.display = "flex";
             document.getElementById("game-over-message").textContent =
                 "Great Job!. You Won.";
             document.getElementById("overlay").className = "win";
         } else {
+            //This block is updated when the user lost
             document.getElementById("game-over-message").textContent =
                 "Sorry, better luck next time!";
             document.getElementById("overlay").className = "lose";
         }
     }
 
+    //This method reset the game all the values, properties are set to default
     resetGame() {
-        //Keyboard Reset
+        //On screen Keyboard Reset
         const qwerty = document.getElementById("qwerty");
         const qwertyButtons = qwerty.querySelectorAll("button");
         qwertyButtons.forEach(button => {
@@ -115,7 +164,8 @@ class Game {
         //display blocks
         const ul = document.querySelector("#phrase ul");
         while (ul.firstChild) {
-            ul.removeChild(ul.firstChild);
+            // while ul has firstChild, another way to clear the li items
+            ul.removeChild(ul.firstChild); //remove that firstChild
         }
     }
 }
