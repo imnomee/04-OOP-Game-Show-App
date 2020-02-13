@@ -10,17 +10,31 @@ class Game {
             new Phrase("Life is a box of Chocolate"),
             new Phrase("May the force be with you"),
             new Phrase("You talking to me"),
-            new Phrase("You kidding bro"),
-            new Phrase("Testing I am ")
+            new Phrase("Eat Your Foot"),
+            new Phrase("Jingle Bells"),
+            new Phrase("Easy Peasy"),
+            new Phrase("I love you"),
+            new Phrase("Nice to meet you"),
+            new Phrase("I speak English"),
+            new Phrase("The ball is in your court"),
+            new Phrase("A piece of cake"),
+            new Phrase("Once in a blue moon"),
+            new Phrase("Jack and Jill"),
+            new Phrase("Salt and Pepper"),
+            new Phrase("A flying koala"),
+            new Phrase("School is lame"),
+            new Phrase("Sing a song")
         ];
 
         return phraseList;
     }
     startGame() {
+        this.resetGame();
         document.getElementById("overlay").style.display = "none";
         this.activePhrase = new Phrase(this.getRandomPhrase());
 
         this.activePhrase.addPhraseToDisplay();
+        console.log(this.activePhrase.phrase); // Just so we can see which phrase is displayed
     }
 
     getRandomPhrase() {
@@ -43,8 +57,6 @@ class Game {
         }
 
         this.gameOver(this.checkForWin());
-
-        console.log(this.activePhrase.phrase);
     }
 
     removeLife() {
@@ -53,9 +65,7 @@ class Game {
         if (triesLeft > 0) {
             lives[this.missed].firstElementChild.src = "images/lostHeart.png";
             this.missed += 1;
-            console.log(this.missed);
         }
-        // this.missed += 1;
 
         if (this.missed == 5) {
             this.gameOver(true);
@@ -108,7 +118,5 @@ class Game {
         while (ul.firstChild) {
             ul.removeChild(ul.firstChild);
         }
-        console.log("Calling start game");
-        // this.startGame();
     }
 }
