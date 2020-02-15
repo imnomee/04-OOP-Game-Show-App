@@ -64,6 +64,7 @@ class Game {
 
     handleInteraction(e) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         // console.log(e.key.toLowerCase());
         const char = qwerty.querySelectorAll("button"); //find all the buttons
         for (let i = 0; i < char.length; i++) {
@@ -129,6 +130,8 @@ class Game {
 
 =======
 >>>>>>> parent of dc1f4ff... complete with keyboard
+=======
+>>>>>>> parent of dc1f4ff... complete with keyboard
         e.disabled = true;
 
         const c = e.target.textContent;
@@ -145,6 +148,7 @@ class Game {
     }
 
     removeLife() {
+<<<<<<< HEAD
 <<<<<<< HEAD
         console.log("remove life");
         const lives = document.getElementsByClassName("tries"); //Total Lives
@@ -164,6 +168,13 @@ class Game {
             lives[this.missed].firstElementChild.src = "images/lostHeart.png";
             this.missed += 1;
 >>>>>>> parent of dc1f4ff... complete with keyboard
+=======
+        const lives = document.getElementsByClassName("tries");
+        const triesLeft = lives.length - this.missed;
+        if (triesLeft > 0) {
+            lives[this.missed].firstElementChild.src = "images/lostHeart.png";
+            this.missed += 1;
+>>>>>>> parent of dc1f4ff... complete with keyboard
         }
 
         if (this.missed == 5) {
@@ -174,16 +185,22 @@ class Game {
 
     checkForWin() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         const hiddenLetters = document.getElementsByClassName("hide letter"); //Total hidden litters which are set by Phrase class
         if (hiddenLetters.length == 0) {
             //if more than zero, not winning yet if 0 return true and player won
             console.log("Game Won");
 =======
+=======
+>>>>>>> parent of dc1f4ff... complete with keyboard
         const hiddenLetters = document.getElementsByClassName("hide letter");
         if (hiddenLetters.length > 0) {
             return false;
         } else {
             this.resetGame();
+<<<<<<< HEAD
+>>>>>>> parent of dc1f4ff... complete with keyboard
+=======
 >>>>>>> parent of dc1f4ff... complete with keyboard
             return true;
         } else {
@@ -194,10 +211,13 @@ class Game {
 
     gameOver(gameWon) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         console.log("gameOver called with " + gameWon);
         //if the game won has input of true it will display and dset the content to this winning block
         if (gameWon == true) {
 =======
+=======
+>>>>>>> parent of dc1f4ff... complete with keyboard
         if (gameWon) {
 >>>>>>> parent of dc1f4ff... complete with keyboard
             document.getElementById("overlay").style.display = "flex";
