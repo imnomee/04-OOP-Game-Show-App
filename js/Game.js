@@ -1,12 +1,11 @@
 class Game {
     constructor() {
         this.missed = 0; //failed tries
-        this.phrases = this.createPhrases(); //set to a method which is creating list of phrase arrays
-        this.activePhrase = null; //currently active in game and set to null on start
+        this.phrases = this.createPhrases(); //array of 5 Phrase Objects
+        this.activePhrase = null; //currently active in game
     }
 
     createPhrases() {
-        //Generating list of Phrase Objects and passing phrases in it
         const phraseList = [
             new Phrase("Life is a box of Chocolate"),
             new Phrase("May the force be with you"),
@@ -46,26 +45,25 @@ class Game {
             new Phrase("Unicorns are fluffy")
         ];
 
-        return phraseList; // Returning full phrase list we can use for game
+        return phraseList;
     }
     startGame() {
-        this.resetGame(); //This reset method is called every time on start of the game.
-        document.getElementById("overlay").style.display = "none"; // first overlay is set to none so we can see the buttons and pharse
-        this.activePhrase = new Phrase(this.getRandomPhrase()); //set active phrase to one of the randomly generated pharse
+        this.resetGame();
+        document.getElementById("overlay").style.display = "none";
+        this.activePhrase = new Phrase(this.getRandomPhrase());
 
-        this.activePhrase.addPhraseToDisplay(); // Setting the active phrase to display
-
+        this.activePhrase.addPhraseToDisplay();
         console.log(this.activePhrase.phrase); // Just so we can see which phrase is displayed
     }
 
-    //Getting random phrase from phrases and returning
     getRandomPhrase() {
-        const randNum = Math.floor(Math.random() * this.phrases.length);
-        const phrase = this.phrases[randNum].phrase;
+        const r = Math.floor(Math.random() * this.phrases.length);
+        const phrase = this.phrases[r].phrase;
         return phrase;
     }
 
     handleInteraction(e) {
+<<<<<<< HEAD
         // console.log(e.key.toLowerCase());
         const char = qwerty.querySelectorAll("button"); //find all the buttons
         for (let i = 0; i < char.length; i++) {
@@ -129,6 +127,8 @@ class Game {
     //// START OF THE CODE /////
     handleInteraction(e) {
 
+=======
+>>>>>>> parent of dc1f4ff... complete with keyboard
         e.disabled = true;
 
         const c = e.target.textContent;
@@ -144,11 +144,8 @@ class Game {
         this.gameOver(this.checkForWin());
     }
 
-    //// END OF THE CODE ////
-    */
-
-    //This method removes the life if the incorrect guess is made.
     removeLife() {
+<<<<<<< HEAD
         console.log("remove life");
         const lives = document.getElementsByClassName("tries"); //Total Lives
         console.log("Lives: " + lives.length);
@@ -160,6 +157,13 @@ class Game {
             lives[this.missed].firstElementChild.src = "images/lostHeart.png"; //change heart image
             this.missed += 1; // add one to missed
             console.log(triesLeft);
+=======
+        const lives = document.getElementsByClassName("tries");
+        const triesLeft = lives.length - this.missed;
+        if (triesLeft > 0) {
+            lives[this.missed].firstElementChild.src = "images/lostHeart.png";
+            this.missed += 1;
+>>>>>>> parent of dc1f4ff... complete with keyboard
         }
 
         if (this.missed == 5) {
@@ -168,12 +172,19 @@ class Game {
         }
     }
 
-    //This method will check if the player has revealed all letters
     checkForWin() {
+<<<<<<< HEAD
         const hiddenLetters = document.getElementsByClassName("hide letter"); //Total hidden litters which are set by Phrase class
         if (hiddenLetters.length == 0) {
             //if more than zero, not winning yet if 0 return true and player won
             console.log("Game Won");
+=======
+        const hiddenLetters = document.getElementsByClassName("hide letter");
+        if (hiddenLetters.length > 0) {
+            return false;
+        } else {
+            this.resetGame();
+>>>>>>> parent of dc1f4ff... complete with keyboard
             return true;
         } else {
             console.log("Not won yet");
@@ -181,26 +192,27 @@ class Game {
         }
     }
 
-    //Game over method will display overlay and message depending on the outcome
     gameOver(gameWon) {
+<<<<<<< HEAD
         console.log("gameOver called with " + gameWon);
         //if the game won has input of true it will display and dset the content to this winning block
         if (gameWon == true) {
+=======
+        if (gameWon) {
+>>>>>>> parent of dc1f4ff... complete with keyboard
             document.getElementById("overlay").style.display = "flex";
             document.getElementById("game-over-message").textContent =
                 "Great Job!. You Won.";
             document.getElementById("overlay").className = "win";
         } else {
-            //This block is updated when the user lost
             document.getElementById("game-over-message").textContent =
                 "Sorry, better luck next time!";
             document.getElementById("overlay").className = "lose";
         }
     }
 
-    //This method reset the game all the values, properties are set to default
     resetGame() {
-        //On screen Keyboard Reset
+        //Keyboard Reset
         const qwerty = document.getElementById("qwerty");
         const qwertyButtons = qwerty.querySelectorAll("button");
         qwertyButtons.forEach(button => {
@@ -219,8 +231,7 @@ class Game {
         //display blocks
         const ul = document.querySelector("#phrase ul");
         while (ul.firstChild) {
-            // while ul has firstChild, another way to clear the li items
-            ul.removeChild(ul.firstChild); //remove that firstChild
+            ul.removeChild(ul.firstChild);
         }
     }
 }
