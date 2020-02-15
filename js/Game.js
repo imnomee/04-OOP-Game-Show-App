@@ -24,7 +24,26 @@ class Game {
             new Phrase("Salt and Pepper"),
             new Phrase("A flying koala"),
             new Phrase("School is lame"),
-            new Phrase("Sing a song")
+            new Phrase("Sing a song"),
+            new Phrase("bruno mars is bae"),
+            new Phrase("All my life I had to fight"),
+            new Phrase("daisy is an angel"),
+            new Phrase("Elephant Shoe"),
+            new Phrase("Foggy London awaits"),
+            new Phrase("I like long bananas"),
+            new Phrase("olive juice"),
+            new Phrase("you are adopted"),
+            new Phrase("Dollar Deals"),
+            new Phrase("I lord you"),
+            new Phrase("You moved my cheese"),
+            new Phrase("What ran over grandma"),
+            new Phrase("Popping pure puree"),
+            new Phrase("Too late to debate on fate"),
+            new Phrase("Feelings reveal real feels"),
+            new Phrase("Wipe that smile off your face"),
+            new Phrase("Green tea KitKat"),
+            new Phrase("You are a tomato"),
+            new Phrase("Unicorns are fluffy")
         ];
 
         return phraseList; // Returning full phrase list we can use for game
@@ -46,7 +65,6 @@ class Game {
         return phrase;
     }
 
-    //This is the main interaction method with all the logic
     handleInteraction(e) {
         // console.log(e.key.toLowerCase());
         const char = qwerty.querySelectorAll("button"); //find all the buttons
@@ -58,23 +76,53 @@ class Game {
 
                 button.disabled = true; //disable the button
 
-                if (this.activePhrase.checkLetter(buttonText)) {
-                    //if active phrase has the button text
-                    button.className = "chosen"; //change the class of button to chosen
-                    this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
-                } else {
+                if (!this.activePhrase.checkLetter(buttonText)) {
+                    this.removeLife();
                     if (button.className != "wrong") {
                         //if the button class is not already wrong
                         button.className = "wrong"; //set it to wrong
-                        this.removeLife(); //remove life
+                        //remove life
+                    }
+                } else if (this.activePhrase.checkLetter(buttonText)) {
+                    if (button.className != "chosen") {
+                        button.className = "chosen"; //change the class of button to chosen
+                        this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+                        if (this.checkForWin() == true) {
+                            this.gameOver(true);
+                        }
                     }
                 }
             }
         }
-        if (this.checkForWin()) {
-            this.gameOver(this.checkForWin()); //check if the user is won. then display gameOver
-        }
     }
+    //This is the main interaction method with all the logic
+    // handleInteraction(e) {
+    //     // console.log(e.key.toLowerCase());
+    //     const char = qwerty.querySelectorAll("button"); //find all the buttons
+    //     for (let i = 0; i < char.length; i++) {
+    //         const button = char[i];
+    //         const buttonText = button.innerText;
+    //         if (e.key.toLowerCase() == buttonText) {
+    //             // if the buttons has the text of the key pressed
+
+    //             button.disabled = true; //disable the button
+
+    //             if (this.activePhrase.checkLetter(buttonText)) {
+    //                 //if active phrase has the button text
+    //                 button.className = "chosen"; //change the class of button to chosen
+    //                 this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+    //             } else {
+    //                 this.removeLife();
+    //                 if (button.className != "wrong") {
+    //                     //if the button class is not already wrong
+    //                     button.className = "wrong"; //set it to wrong
+    //                     //remove life
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    // }
 
     /* 
     FOLLOWING CODE IS ONLY TO HANDLE INTERATCTION FROM THE ON SCREEN KEYBOARD
@@ -101,36 +149,43 @@ class Game {
 
     //This method removes the life if the incorrect guess is made.
     removeLife() {
+        console.log("remove life");
         const lives = document.getElementsByClassName("tries"); //Total Lives
+        console.log("Lives: " + lives.length);
         const triesLeft = lives.length - this.missed; //Total tries left: length - missed
+        console.log(triesLeft);
 
         //If we have more than 0 tries then change the pic and add to missed
         if (triesLeft > 0) {
             lives[this.missed].firstElementChild.src = "images/lostHeart.png"; //change heart image
             this.missed += 1; // add one to missed
+            console.log(triesLeft);
         }
 
-        //If missed count is 5, call gameOver
         if (this.missed == 5) {
-            this.gameOver(true);
+            console.log(triesLeft, this.missed);
+            this.gameOver();
         }
     }
 
     //This method will check if the player has revealed all letters
     checkForWin() {
         const hiddenLetters = document.getElementsByClassName("hide letter"); //Total hidden litters which are set by Phrase class
-        if (hiddenLetters.length > 0) {
+        if (hiddenLetters.length == 0) {
             //if more than zero, not winning yet if 0 return true and player won
-            return false;
-        } else {
+            console.log("Game Won");
             return true;
+        } else {
+            console.log("Not won yet");
+            return false;
         }
     }
 
     //Game over method will display overlay and message depending on the outcome
     gameOver(gameWon) {
+        console.log("gameOver called with " + gameWon);
         //if the game won has input of true it will display and dset the content to this winning block
-        if (gameWon) {
+        if (gameWon == true) {
             document.getElementById("overlay").style.display = "flex";
             document.getElementById("game-over-message").textContent =
                 "Great Job!. You Won.";
