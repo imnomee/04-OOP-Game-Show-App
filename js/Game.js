@@ -62,6 +62,9 @@ class Game {
                     //if active phrase has the button text
                     button.className = "chosen"; //change the class of button to chosen
                     this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+                    if (this.checkForWin()) {
+                        this.gameOver(true); //check if the user is won. then display gameOver
+                    }
                 } else {
                     if (button.className != "wrong") {
                         //if the button class is not already wrong
@@ -70,12 +73,6 @@ class Game {
                     }
                 }
             }
-        }
-        this.checkForWin();
-        if (this.checkForWin() == true) {
-            this.gameOver(true); //check if the user is won. then display gameOver
-        } else if (this.checkForWin() == false) {
-            this.gameOver(false);
         }
     }
 
@@ -115,7 +112,7 @@ class Game {
 
         //If missed count is 5, call gameOver
         if (this.missed == 5) {
-            this.gameOver(true);
+            this.gameOver(false);
         }
     }
 
@@ -134,11 +131,15 @@ class Game {
     gameOver(gameWon) {
         //if the game won has input of true it will display and dset the content to this winning block
         if (gameWon) {
+            console.log("gameOver true ran");
             document.getElementById("overlay").style.display = "flex";
-            document.getElementById("game-over-message").textContent =
-                "Great Job!. You Won.";
+            document.getElementById(
+                "game-over-message"
+            ).textContent = `Great Job!. You Won with ${this.missed} live(s) lost`;
             document.getElementById("overlay").className = "win";
         } else {
+            console.log("gameOver false ran");
+            document.getElementById("overlay").style.display = "flex";
             //This block is updated when the user lost
             document.getElementById(
                 "game-over-message"
@@ -149,6 +150,7 @@ class Game {
     }
     //This method reset the game all the values, properties are set to default
     resetGame() {
+        document.getElementById("overlay").className = "start";
         //On screen Keyboard Reset
         const qwerty = document.getElementById("qwerty");
         const qwertyButtons = qwerty.querySelectorAll("button");

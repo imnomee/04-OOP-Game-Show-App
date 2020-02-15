@@ -23,5 +23,6 @@ startButton.addEventListener("click", e => {
 //Keyboard keydown listener set on the document so it can be captured anywhere on the document
 document.addEventListener("keydown", e => {
     //calling Intraction method on game object and passing the event to handler
+
     game.handleInteraction(e);
 });
