@@ -32,7 +32,7 @@ class Game {
     startGame() {
         this.resetGame(); //This reset method is called every time on start of the game.
         document.getElementById("overlay").style.display = "none"; // first overlay is set to none so we can see the buttons and pharse
-        this.activePhrase = new Phrase(this.getRandomPhrase()); //set active phrase to one of the randomly generated pharse
+        this.activePhrase = this.getRandomPhrase(); //set active phrase to one of the randomly generated pharse
 
         this.activePhrase.addPhraseToDisplay(); // Setting the active phrase to display
 
@@ -42,12 +42,14 @@ class Game {
     //Getting random phrase from phrases and returning
     getRandomPhrase() {
         const randNum = Math.floor(Math.random() * this.phrases.length);
-        const phrase = this.phrases[randNum].phrase;
+        // const phrase = this.phrases[randNum].phrase;
+        const phrase = this.phrases[randNum];
         return phrase;
     }
 
     //This is the main interaction method with all the logic
     handleInteraction(e) {
+        console.log(e);
         // console.log(e.key.toLowerCase());
         const char = qwerty.querySelectorAll("button"); //find all the buttons
         for (let i = 0; i < char.length; i++) {
