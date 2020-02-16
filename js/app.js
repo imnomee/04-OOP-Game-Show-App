@@ -9,16 +9,11 @@ startButton.addEventListener("click", e => {
     game.startGame(); // calling startGame method through the game object
 });
 
-/* UNCOMMENT FOLLOWING CODE IF YOU WANT TO TRY AND ENABLE ON SCREEN KEYBOARD
-/// START OF THE CODE ///
-// qwerty.addEventListener("click", e => {
-//     if (e.target.className == "key") {
-//         game.handleInteraction(e);
-//     }
-// });
-
-//// END OF THE CODE////
-*/
+qwerty.addEventListener("click", e => {
+    if (e.target.className == "key") {
+        game.handleInteraction(e);
+    }
+});
 
 //Keyboard keydown listener set on the document so it can be captured anywhere on the document
 document.addEventListener("keydown", e => {

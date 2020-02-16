@@ -42,64 +42,62 @@ class Game {
     //Getting random phrase from phrases and returning
     getRandomPhrase() {
         const randNum = Math.floor(Math.random() * this.phrases.length);
-        // const phrase = this.phrases[randNum].phrase;
         const phrase = this.phrases[randNum];
         return phrase;
     }
 
     //This is the main interaction method with all the logic
     handleInteraction(e) {
-        console.log(e);
-        // console.log(e.key.toLowerCase());
-        const char = qwerty.querySelectorAll("button"); //find all the buttons
-        for (let i = 0; i < char.length; i++) {
-            const button = char[i];
-            const buttonText = button.innerText;
-            if (e.key.toLowerCase() == buttonText) {
-                // if the buttons has the text of the key pressed
+        if (e.type == "keydown") {
+            console.log(e.type);
+            // console.log(e.key.toLowerCase());
+            const char = qwerty.querySelectorAll("button"); //find all the buttons
+            for (let i = 0; i < char.length; i++) {
+                const button = char[i];
+                const buttonText = button.innerText;
+                if (e.key.toLowerCase() == buttonText) {
+                    // if the buttons has the text of the key pressed
 
-                button.disabled = true; //disable the button
+                    button.disabled = true; //disable the button
 
-                if (this.activePhrase.checkLetter(buttonText)) {
-                    //if active phrase has the button text
-                    button.className = "chosen"; //change the class of button to chosen
-                    this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
-                    if (this.checkForWin()) {
-                        this.gameOver(true); //check if the user is won. then display gameOver
+                    if (this.activePhrase.checkLetter(buttonText)) {
+                        //if active phrase has the button text
+                        button.className = "chosen"; //change the class of button to chosen
+                        this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+                        if (this.checkForWin()) {
+                            this.gameOver(true); //check if the user is won. then display gameOver
+                        }
+                    } else {
+                        if (button.className != "wrong") {
+                            //if the button class is not already wrong
+                            button.className = "wrong"; //set it to wrong
+                            this.removeLife(); //remove life
+                        }
                     }
-                } else {
-                    if (button.className != "wrong") {
-                        //if the button class is not already wrong
-                        button.className = "wrong"; //set it to wrong
-                        this.removeLife(); //remove life
-                    }
+                }
+            }
+        } else if (e.type == "click") {
+            e.disabled = true;
+            const button = e.target;
+
+            const buttonText = button.textContent;
+
+            if (this.activePhrase.checkLetter(buttonText)) {
+                //if active phrase has the button text
+                button.className = "chosen"; //change the class of button to chosen
+                this.activePhrase.showMatchedLetter(buttonText); //display the matched letter
+                if (this.checkForWin()) {
+                    this.gameOver(true); //check if the user is won. then display gameOver
+                }
+            } else {
+                if (button.className != "wrong") {
+                    //if the button class is not already wrong
+                    button.className = "wrong"; //set it to wrong
+                    this.removeLife(); //remove life
                 }
             }
         }
     }
-
-    /* 
-    FOLLOWING CODE IS ONLY TO HANDLE INTERATCTION FROM THE ON SCREEN KEYBOARD
-    //// START OF THE CODE /////
-    handleInteraction(e) {
-
-        e.disabled = true;
-
-        const c = e.target.textContent;
-
-        if (this.activePhrase.checkLetter(c)) {
-            e.target.className = "chosen";
-            this.activePhrase.showMatchedLetter(c);
-        } else {
-            e.target.className = "wrong";
-            this.removeLife();
-        }
-
-        this.gameOver(this.checkForWin());
-    }
-
-    //// END OF THE CODE ////
-    */
 
     //This method removes the life if the incorrect guess is made.
     removeLife() {
@@ -158,6 +156,7 @@ class Game {
         const qwertyButtons = qwerty.querySelectorAll("button");
         qwertyButtons.forEach(button => {
             button.className = "key";
+            button.disabled = false;
         });
 
         //Missed Reset
