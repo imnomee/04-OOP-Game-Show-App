@@ -24,7 +24,14 @@ class Game {
             new Phrase("Salt and Pepper"),
             new Phrase("A flying koala"),
             new Phrase("School is lame"),
-            new Phrase("Sing a song")
+            new Phrase("Sing a song"),
+            new Phrase("Olive juice"),
+            new Phrase("You are adopted"),
+            new Phrase("Elephant Foot"),
+            new Phrase("The cows were flying"),
+            new Phrase("Lets get that bread"),
+            new Phrase("I love pizza"),
+            new Phrase("Harry the plotter")
         ];
 
         return phraseList; // Returning full phrase list we can use for game
@@ -48,9 +55,8 @@ class Game {
 
     //This is the main interaction method with all the logic
     handleInteraction(e) {
+        // If the event is coming from physical keyboard and catching with 'keydown'
         if (e.type == "keydown") {
-            console.log(e.type);
-            // console.log(e.key.toLowerCase());
             const char = qwerty.querySelectorAll("button"); //find all the buttons
             for (let i = 0; i < char.length; i++) {
                 const button = char[i];
@@ -76,6 +82,7 @@ class Game {
                     }
                 }
             }
+            //If the event is coming the mouse click
         } else if (e.type == "click") {
             e.disabled = true;
             const button = e.target;
@@ -155,8 +162,8 @@ class Game {
         const qwerty = document.getElementById("qwerty");
         const qwertyButtons = qwerty.querySelectorAll("button");
         qwertyButtons.forEach(button => {
-            button.className = "key";
-            button.disabled = false;
+            button.className = "key"; // change back to key
+            button.disabled = false; // enable all buttons
         });
 
         //Missed Reset

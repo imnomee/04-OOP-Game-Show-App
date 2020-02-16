@@ -9,8 +9,10 @@ startButton.addEventListener("click", e => {
     game.startGame(); // calling startGame method through the game object
 });
 
+//Click listener for onScreen qwerty keyboard
 qwerty.addEventListener("click", e => {
     if (e.target.className == "key") {
+        //only if the clicked target has key class name
         game.handleInteraction(e);
     }
 });
